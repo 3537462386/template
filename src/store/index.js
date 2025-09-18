@@ -1,17 +1,12 @@
-// src/store/index.js
 import { createPinia } from 'pinia'
-import { createPersistedState } from 'pinia-plugin-persistedstate' // 数据持久化
 
+// 创建Pinia实例（不使用任何持久化插件）
 const store = createPinia()
-store.use(
-  createPersistedState({
-    storage: {
-      getItem: uni.getStorageSync,
-      setItem: uni.setStorageSync,
-    },
-  }),
-)
 
+// 导出store实例
+export default store
+
+// 用于在入口文件中安装store
 export function setupStore(app) {
-  app.use(piniaStore)
+  app.use(store) // 注册Pinia到Vue应用
 }
