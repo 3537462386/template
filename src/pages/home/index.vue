@@ -6,14 +6,10 @@
         <image v-else src="@/static/blood.png"  />
       </view>
     </view>
-    <view class="leftAction">
-      <view class="smallAction"></view>
-      <view class="bigAction"></view>
-    </view>
-    <view class="rightAction">
-      <view class="smallAction"></view>
-      <view class="bigAction"></view>
-    </view>
+    <view class="leftTopAction"></view>
+    <view class="leftBottomAction"></view>
+    <view class="rightTopAction"></view>
+    <view class="rightBottomAction"></view>
   </view>
 </template>
 
@@ -68,6 +64,7 @@ function reduceBloodLimit() {
     text-align: center;
     display: flex;
     justify-content: space-around;
+    flex-wrap: wrap;
 
     .state-box {
       width: 60rpx;
@@ -83,30 +80,44 @@ function reduceBloodLimit() {
     }
   }
 
-  .leftAction {
+  .leftTopAction {
     position: absolute;
-    left: 30rpx;
-    bottom: 50rpx;
-    width: 100rpx;
-    height: 100rpx;
-  }
-
-  .rightAction {
-    position: absolute;
-    right: 30rpx;
-    bottom: 50rpx;
-    width: 100rpx;
-    height: 100rpx;
-  }
-
-  .smallAction {
+    left: 50rpx;
+    bottom: 70rpx;
     width: 30rpx;
     height: 30rpx;
+    border-radius: 50%;
+    background: #9dbfff;
   }
 
-  .bigAction {
-    width: 50rpx;
-    height: 50rpx;
+  .rightTopAction {
+    position: absolute;
+    right: 50rpx;
+    bottom: 70rpx;
+    width: 30rpx;
+    height: 30rpx;
+    border-radius: 50%;
+    background: #ff9dbf;
+  }
+
+  .leftBottomAction {
+    position: absolute;
+    left: 60rpx;
+    bottom: 20rpx;
+    width: 40rpx;
+    height: 40rpx;
+    border-radius: 50%;
+    background: #fff100;
+  }
+
+  .rightBottomAction {
+    position: absolute;
+    right: 60rpx;
+    bottom: 20rpx;
+    width: 40rpx;
+    height: 40rpx;
+    border-radius: 50%;
+    background: #58fbb5;
   }
 }
 </style>
