@@ -6,15 +6,38 @@
         <image v-else src="@/static/blood.png"  />
       </view>
     </view>
-    <view class="leftTopAction"></view>
-    <view class="leftBottomAction"></view>
-    <view class="rightTopAction"></view>
-    <view class="rightBottomAction"></view>
+    <view class="leftTopAction" @click="addBloodLimit"></view>
+    <view class="leftBottomAction" @click="addBlood"></view>
+    <view class="rightTopAction" @click="reduceBloodLimit"></view>
+    <view class="rightBottomAction" @click="reduceBlood"></view>
   </view>
 </template>
 
 <script setup>
 import { reactive } from 'vue'
+import { onUnmounted } from 'vue'
+
+// 创建音频
+const innerAudioContext = uni.createInnerAudioContext()
+const musicUrl = ['/static/music/background.mp3','123']
+
+function playMusic(url) {
+  innerAudioContext.stop()
+  innerAudioContext.src = url
+
+  innerAudioContext.load()
+  innerAudioContext.play()
+    .then(() => {
+      console.log('音乐开始播放')
+    })
+    .catch(err => {
+      console.error('播放失败:', err)
+      uni.showToast({
+        title: '播放失败',
+        icon: 'none'
+      })
+    })
+}
 
 const bloodList = reactive([1,1,1,1])
 const armorNums = reactive(0)
@@ -26,6 +49,7 @@ function addBlood() {
       break;
     }
   }
+  playMusic(musicUrl[0])
 }
 
 function reduceBlood() {
@@ -35,6 +59,7 @@ function reduceBlood() {
       break;
     }
   }
+  playMusic(musicUrl[1])
 }
 
 function addBloodLimit() {
@@ -44,6 +69,10 @@ function addBloodLimit() {
 function reduceBloodLimit() {
   bloodList.pop()
 }
+
+onUnmounted(() => {
+  innerAudioContext.destroy()
+})
 
 </script>
 
