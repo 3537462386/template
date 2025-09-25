@@ -3,8 +3,11 @@
   <transition name="dialog-fade">
     <view v-if="visible" class="dialog-overlay" @click.self="handleMaskClose">
       <view class="dialog-box">
+        <view class="close-button" @click="handleClose">
+          <text class="iconfont icon-guanbi"></text>
+        </view>
         <slot></slot>
-        <button class="dialog-close" @click="handleClose">关闭</button>
+        <button v-if="showCloseButton" class="dialog-close" @click="handleClose">关闭</button>
       </view>
     </view>
   </transition>
@@ -24,6 +27,10 @@ const props = defineProps({
   closeOnClickMask: {
     type: Boolean,
     default: true
+  },
+  showCloseButton: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -81,7 +88,7 @@ function handleMaskClose() {
 defineExpose({open, close})
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .dialog-overlay {
   position: fixed;
   top: 0;
@@ -96,15 +103,31 @@ defineExpose({open, close})
 }
 
 .dialog-box {
-  width: 600rpx;
   background-color: #fff;
   border-radius: 16rpx;
   padding: 30rpx;
   box-sizing: border-box;
+  position: relative;
+}
+
+.close-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50rpx;
+  height: 50rpx;
+  font-size: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:active {
+    background: $uni-text-color-grey;
+  }
 }
 
 .dialog-close {
-  margin-top: 20rpx;
+  margin-top: 30rpx;
   width: 100%;
   background-color: #f5f5f5;
 }

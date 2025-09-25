@@ -1,0 +1,23 @@
+{
+  "id": "5030414",
+  "name": "三国杀",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "19524684",
+      "name": "展开",
+      "font_class": "zhankai",
+      "unicode": "e644",
+      "unicode_decimal": 58948
+    },
+    {
+      "icon_id": "17816846",
+      "name": "关闭",
+      "font_class": "guanbi",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    }
+  ]
+}

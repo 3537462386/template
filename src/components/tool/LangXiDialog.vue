@@ -1,13 +1,13 @@
 <template>
   <MyDialog v-model="isDialogVisible">
     <view class="container">
+      <text>本次造成</text>
       <text
         class="damage-text"
         :class="{ 'critical-hit': damage > 1 }"
       >
-        本次造成{{ damage }}点伤害
+        {{ damage }}点伤害
       </text>
-      <button @click="getDamage">狼袭</button>
     </view>
   </MyDialog>
 </template>
@@ -25,35 +25,30 @@ function getDamage() {
 
 function openDialog() {
   isDialogVisible.value = true
+  getDamage()
 }
 
 defineExpose({openDialog})
 </script>
 <style lang="scss" scoped>
 .container {
-  width: 200rpx;
-  height: 200rpx;
-  padding: 30rpx;
+  width: 300rpx;
+  height: 300rpx;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 30rpx;
+  font-size: 32rpx;
 
   .damage-text {
-    font-size: 32rpx;
     transition: all 0.3s ease;
-
-    .damage-text {
-      font-size: 32rpx;
-      transition: all 0.3s ease;
+    margin-top: 20rpx;
 
       &.critical-hit {
         color: #e53e3e;
         font-weight: bold;
         transform: scale(1.1);
       }
-    }
   }
 }
 </style>
