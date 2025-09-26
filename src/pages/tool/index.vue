@@ -1,11 +1,11 @@
 <template>
   <view class="container">
     <view class="tool-box" @click="openLangXiDialog">狼袭</view>
-    <view class="tool-box">狼袭</view>
+    <view class="tool-box"@click="openTaoLuanDialog">滔乱</view>
     <view class="tool-box">狼袭</view>
 
     <LangXiDialog ref="langXiDialogRef" />
-    <TaoLuanDialog ref="langXiDialogRef" />
+    <TaoLuanDialog ref="taoLuanDialogRef" />
   </view>
 </template>
 <script setup>
@@ -17,6 +17,9 @@ const langXiDialogRef = ref(null)
 const taoLuanDialogRef = ref(null)
 function openLangXiDialog() {
   langXiDialogRef.value.openDialog()
+}
+function openTaoLuanDialog() {
+  taoLuanDialogRef.value.openDialog()
 }
 
 </script>

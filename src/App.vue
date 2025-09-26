@@ -1,3 +1,5 @@
+<template>
+</template>
 <script>
 export default {
   onLaunch: function () {
@@ -11,9 +13,6 @@ export default {
   },
 }
 </script>
-<template>
-</template>
-
 <style>
 /*每个页面公共css */
 @import './static/iconfont/iconfont.css';
