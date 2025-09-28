@@ -1,18 +1,18 @@
 {
 	"pages": [
     {
+      "path": "pages/home/index",
+      "style": {
+        "navigationBarTitleText": "Home",
+        "mp-weixin": { "pageOrientation": "landscape" }
+      }
+    },
+    {
       "path": "pages/tool/index",
       "style": {
         "navigationBarTitleText": "Tool"
       }
     },
-		{
-			"path": "pages/home/index",
-			"style": {
-				"navigationBarTitleText": "Home",
-        "mp-weixin": { "pageOrientation": "landscape" }
-			}
-		},
 		{
 			"path": "pages/help/index",
 			"style": {

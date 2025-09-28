@@ -1,5 +1,3 @@
-<template>
-</template>
 <script>
 export default {
   onLaunch: function () {
@@ -16,4 +14,11 @@ export default {
 <style>
 /*每个页面公共css */
 @import './static/iconfont/iconfont.css';
+
+page {
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
+}
 </style>

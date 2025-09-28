@@ -1,21 +1,43 @@
 <template>
   <view class="container">
-    <view class="state">
-      <view v-for="(item,index) in bloodList" :key="index" class="state-box">
-        <image v-if="item" src="@/static/blood-action.png" />
-        <image v-else src="@/static/blood.png"  />
+    <view class="side">
+      <view>
+        <view class="tool-box" @click="openLangXiDialog">狼袭</view>
+        <view class="tool-box" @click="openTaoLuanDialog">滔乱</view>
       </view>
     </view>
-    <view class="leftTopAction" @click="addBloodLimit"></view>
-    <view class="leftBottomAction" @click="addBlood"></view>
-    <view class="rightTopAction" @click="reduceBloodLimit"></view>
-    <view class="rightBottomAction" @click="reduceBlood"></view>
+    <view class="main">
+      <view class="state">
+        <view v-for="(item,index) in bloodList" :key="index" class="state-box">
+          <image v-if="item" src="@/static/blood-action.png" />
+          <image v-else src="@/static/blood.png"  />
+        </view>
+      </view>
+      <view class="leftTopAction" @click="addBloodLimit"></view>
+      <view class="leftBottomAction" @click="addBlood"></view>
+      <view class="rightTopAction" @click="reduceBloodLimit"></view>
+      <view class="rightBottomAction" @click="reduceBlood"></view>
+    </view>
+
+    <LangXiDialog ref="langXiDialogRef" />
+    <TaoLuanDialog ref="taoLuanDialogRef" />
   </view>
 </template>
 
 <script setup>
-import { reactive } from 'vue'
+import { reactive,ref } from 'vue'
 import { onUnmounted } from 'vue'
+import LangXiDialog from "../../components/tool/LangXiDialog.vue";
+import TaoLuanDialog from "../../components/tool/TaoLuanDialog.vue";
+
+const langXiDialogRef = ref(null)
+const taoLuanDialogRef = ref(null)
+function openLangXiDialog() {
+  langXiDialogRef.value.openDialog()
+}
+function openTaoLuanDialog() {
+  taoLuanDialogRef.value.openDialog()
+}
 
 // 创建音频
 const innerAudioContext = uni.createInnerAudioContext()
@@ -82,7 +104,31 @@ onUnmounted(() => {
   height: 100vh;
   position: absolute;
 
-  .state {
+  .side {
+    width: 200rpx;
+    height: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 50rpx 0;
+
+    .tool-box {
+      width: 280rpx;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 80rpx;
+      background: #ffd150;
+    }
+  }
+
+  .main {
+    flex: 1;
+    height: 100%;
+    position: relative;
+
+    .state {
     width: 400rpx;
     height: 150rpx;
     padding: 30rpx;
@@ -148,5 +194,6 @@ onUnmounted(() => {
     border-radius: 50%;
     background: #58fbb5;
   }
+}
 }
 </style>

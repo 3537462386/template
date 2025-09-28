@@ -26,7 +26,7 @@ function openTaoLuanDialog() {
 <style scoped lang="scss">
 .container {
   width: 750rpx;
-  padding: 20rpx 60rpx;
+  padding: 0 60rpx;
   box-sizing: border-box;
   display: flex;
   flex-wrap: wrap;
@@ -39,7 +39,7 @@ function openTaoLuanDialog() {
     justify-content: center;
     height: 80rpx;
     background: #ffd150;
-    margin: 40rpx 0;
+    margin: 60rpx 0;
   }
 }
 </style>
