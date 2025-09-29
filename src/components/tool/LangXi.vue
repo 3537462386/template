@@ -1,6 +1,4 @@
 <template>
-  <SkillButton class="skill-box" name="狼袭" @click="openDialog" />
-
   <MyDialog v-model="isDialogVisible">
     <view class="container">
       <text>本次造成</text>
@@ -15,9 +13,8 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import {defineExpose, ref} from 'vue'
 import MyDialog from "../MyDialog.vue";
-import SkillButton from "../SkillButton.vue";
 
 const isDialogVisible = ref(false)
 const damage = ref(0)
@@ -30,6 +27,8 @@ function openDialog() {
   isDialogVisible.value = true
   getDamage()
 }
+
+defineExpose({openDialog})
 </script>
 <style lang="scss" scoped>
 .skill-box {

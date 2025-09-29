@@ -216,3 +216,17 @@ export const guanNingSkill = [
   }
 ]
 
+export const roleList = [
+  {
+    name: '李傕',
+    skillList:['狼袭'],
+    roleImg: '',
+    id: 1,
+  },
+  {
+    name: '张让',
+    skillList:['滔乱'],
+    roleImg: '',
+    id: 2,
+  }
+]

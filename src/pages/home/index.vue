@@ -1,10 +1,22 @@
 <template>
   <view class="container">
     <view class="side">
-      <view>
-        <view class="tool-box" @click="openLangXiDialog">狼袭</view>
-        <view class="tool-box" @click="openTaoLuanDialog">滔乱</view>
+      <view v-show="selectedRole">
+        <view
+          v-for="item in roleList"
+          :key="item.id"
+          class="tool-box"
+          @click="selectRole(item)"
+        >
+          {{ item.name }}
+        </view>
       </view>
+      <MyRoleCard
+        v-show="!selectedRole"
+        :url="selectedRole.roleImg"
+        :role="selectedRole.skillList"
+        @use-skill="useSkill"
+      />
     </view>
     <view class="main">
       <view class="state">
@@ -27,17 +39,14 @@
 <script setup>
 import { reactive,ref } from 'vue'
 import { onUnmounted } from 'vue'
+import { roleList } from "../../data";
 import LangXiDialog from "../../components/tool/LangXiDialog.vue";
 import TaoLuanDialog from "../../components/tool/TaoLuanDialog.vue";
+import MyRoleCard from "../../components/MyRoleCard.vue";
 
 const langXiDialogRef = ref(null)
 const taoLuanDialogRef = ref(null)
-function openLangXiDialog() {
-  langXiDialogRef.value.openDialog()
-}
-function openTaoLuanDialog() {
-  taoLuanDialogRef.value.openDialog()
-}
+const instance = getCurrentInstance()
 
 // 创建音频
 const innerAudioContext = uni.createInnerAudioContext()
@@ -61,6 +70,7 @@ function playMusic(url) {
     })
 }
 
+// 状态
 const bloodList = reactive([1,1,1,1])
 const armorNums = reactive(0)
 
@@ -90,6 +100,19 @@ function addBloodLimit() {
 
 function reduceBloodLimit() {
   bloodList.pop()
+}
+
+// 选择角色
+const selectedRole = ref(null)
+function selectRole(role) {
+  selectedRole.value = role
+}
+
+function useSkill(val) {
+  // 通过字符串名称从 $refs 中获取实例
+  const dialogRef = instance.refs[val]
+  // 调用方法
+  dialogRef?.openDialog()
 }
 
 onUnmounted(() => {
