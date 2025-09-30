@@ -17,10 +17,5 @@ const router = createRouter({
   ]
 })
 
-
-async function setupRouter(app) {
-  app.use(router)
-}
-
-export { router, setupRouter }
+export default router
 

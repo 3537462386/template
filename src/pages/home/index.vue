@@ -1,7 +1,9 @@
 <template>
   <view class="container">
-    <view class="side">
-      <view v-show="selectedRole">
+    <HeaderTab />
+
+    <view v-show="system.isShowRoleCard" class="side" :key="system.isShowRoleCard">
+      <view v-show="!selectedRole">
         <view
           v-for="item in roleList"
           :key="item.id"
@@ -12,9 +14,9 @@
         </view>
       </view>
       <MyRoleCard
-        v-show="!selectedRole"
-        :url="selectedRole.roleImg"
-        :role="selectedRole.skillList"
+        v-show="selectedRole"
+        :role-img="selectedRole?.roleImg"
+        :skill-list="selectedRole?.skillList"
         @use-skill="useSkill"
       />
     </view>
@@ -33,19 +35,27 @@
 
     <LangXiDialog ref="langXiDialogRef" />
     <TaoLuanDialog ref="taoLuanDialogRef" />
+    <DunShiDialog ref="dunShiDialogRef" />
   </view>
 </template>
 
 <script setup>
 import { reactive,ref } from 'vue'
 import { onUnmounted } from 'vue'
-import { roleList } from "../../data";
-import LangXiDialog from "../../components/tool/LangXiDialog.vue";
-import TaoLuanDialog from "../../components/tool/TaoLuanDialog.vue";
-import MyRoleCard from "../../components/MyRoleCard.vue";
+import { getCurrentInstance } from 'vue'
+import { roleList } from "@/data";
+import LangXiDialog from "@/components/tool/LangXiDialog.vue";
+import TaoLuanDialog from "@/components/tool/TaoLuanDialog.vue";
+import DunShiDialog from "@/components/tool/DunShiDialog.vue";
+import MyRoleCard from "@/components/MyRoleCard.vue";
+import { systemStore } from '@/store'
+import HeaderTab from "@/components/HeaderTab.vue";
+
+const system = systemStore()
 
 const langXiDialogRef = ref(null)
 const taoLuanDialogRef = ref(null)
+const dunShiDialogRef = ref(null)
 const instance = getCurrentInstance()
 
 // 创建音频
@@ -72,7 +82,7 @@ function playMusic(url) {
 
 // 状态
 const bloodList = reactive([1,1,1,1])
-const armorNums = reactive(0)
+const armorNums = ref(0)
 
 function addBlood() {
   for (let i = bloodList.length - 1; i >= 0; i--) {
@@ -128,20 +138,21 @@ onUnmounted(() => {
   position: absolute;
 
   .side {
-    width: 200rpx;
+    width: 140rpx;
     height: 100%;
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 50rpx 0;
+    padding: 10rpx;
+    //transition: opacity 0.3s ease;
 
     .tool-box {
-      width: 280rpx;
+      width: 120rpx;
       display: flex;
       align-items: center;
       justify-content: center;
-      height: 80rpx;
+      height: 50rpx;
       background: #ffd150;
     }
   }

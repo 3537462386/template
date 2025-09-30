@@ -1,6 +1,6 @@
 <template>
   <view class="container">
-    <image :src="props.url"></image>
+    <image :src="props.roleImg"></image>
 
     <view class="skill-box">
       <SkillButton
@@ -20,9 +20,9 @@ const props = defineProps({
     type: Array,
     default: () => [],
   },
-  url: {
+  roleImg: {
     type: String,
-    default: "",
+    default: undefined,
   }
 })
 

@@ -1,30 +1,37 @@
 <template>
   <view class="skill-selector">
-    <view v-for="item in baseCardType" :key="item.value" class="skill-box" :class="{ selected: item?.selected }" @click="selectCardType(item.value)">
+    <view v-for="item in cardList" :key="item.id" class="skill-box" :class="{ selected: item?.selected }" @click="selectCardType(item.id)">
       {{ item.label }}
     </view>
   </view>
 </template>
 <script setup>
-import { baseCardType } from '@/data/index.js'
-import { ref } from 'vue'
-import { onLaunch } from "@dcloudio/uni-app";
+import { cardStore } from '@/store'
+import { computed } from "vue";
 
-const cardList = ref([])
+const card = cardStore()
 
-onLaunch(()=> {
-  cardList.value = baseCardType.filter(item => {
-    return item.type !== '延时锦囊'
+const props = defineProps({
+  cardOption: {
+    type: Array,
+    default: () => []
+  },
+})
+
+const cardList = computed(() => {
+  return props.cardOption.map((item) => {
+    item.selected = card.cardList.includes(item.id)
+    return item
   })
 })
 
-function selectCardType (val) {
-  cardList.value = cardList.value.map(item => {
-    if (item.value === val) {
-      item.selected = !item?.selected
-    }
-    return item
-  })
+function selectCardType (id) {
+  const index = card.cardList.indexOf(id);
+  if (index > -1) {
+    card.cardList.splice(index, 1);
+  } else {
+    card.cardList.push(id);
+  }
 }
 
 </script>

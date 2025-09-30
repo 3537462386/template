@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "1301391",
+      "name": "衣服",
+      "font_class": "yifu",
+      "unicode": "e666",
+      "unicode_decimal": 58982
+    },
+    {
+      "icon_id": "9874537",
+      "name": "KHCFDC_头像 ",
+      "font_class": "touxiang",
+      "unicode": "e6de",
+      "unicode_decimal": 59102
+    },
+    {
       "icon_id": "19524684",
       "name": "展开",
       "font_class": "zhankai",

@@ -220,13 +220,13 @@ export const roleList = [
   {
     name: '李傕',
     skillList:['狼袭'],
-    roleImg: '',
+    roleImg: '213',
     id: 1,
   },
   {
     name: '张让',
     skillList:['滔乱'],
-    roleImg: '',
+    roleImg: '123',
     id: 2,
   }
 ]
