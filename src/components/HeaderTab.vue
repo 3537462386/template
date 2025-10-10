@@ -10,7 +10,7 @@ import { systemStore } from '@/store'
 const system = systemStore()
 
 function changeShowRoleCard() {
-  system.isShowRoleCard = !system.isShowRoleCard
+  system.changeShowRoleCard()
 }
 </script>
 <style scoped lang="scss">

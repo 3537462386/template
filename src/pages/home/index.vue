@@ -2,7 +2,7 @@
   <view class="container">
     <HeaderTab />
 
-    <view v-show="system.isShowRoleCard" class="side" :key="system.isShowRoleCard">
+    <view class="side" :class="{ 'hide-side': !system.isShowRoleCard }">
       <view v-show="!selectedRole">
         <view
           v-for="item in roleList"
@@ -20,6 +20,7 @@
         @use-skill="useSkill"
       />
     </view>
+
     <view class="main">
       <view class="state">
         <view v-for="(item,index) in bloodList" :key="index" class="state-box">
@@ -145,7 +146,6 @@ onUnmounted(() => {
     flex-direction: column;
     align-items: center;
     padding: 10rpx;
-    //transition: opacity 0.3s ease;
 
     .tool-box {
       width: 120rpx;
@@ -154,6 +154,11 @@ onUnmounted(() => {
       justify-content: center;
       height: 50rpx;
       background: #ffd150;
+    }
+
+    .hide-side {
+      width: 0;
+      overflow: hidden;
     }
   }
 
