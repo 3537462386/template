@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>太空射击游戏 - Phaser 3</title>
+  <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+    }
+    #gameContainer {
+      border: 2px solid #3498db;
+      border-radius: 8px;
+      box-shadow: 0 0 20px rgba(52, 152, 219, 0.5);
+    }
+    .game-info {
+      color: white;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+<div>
+  <div class="game-info">
+    <h2>🚀 太空射击游戏</h2>
+    <p>使用 ← → 移动，空格键射击</p>
+  </div>
+  <div id="gameContainer"></div>
+</div>
+
+<script>
+  // 游戏配置
+  const config = {
+    type: Phaser.AUTO,
+    width: 800,
+    height: 600,
+    parent: 'gameContainer',
+    backgroundColor: '#000033',
+    physics: {
+      default: 'arcade',
+      arcade: {
+        gravity: { y: 0 },
+        debug: false
+      }
+    },
+    scene: {
+      preload: preload,
+      create: create,
+      update: update
+    }
+  };
+
+  // 游戏变量
+  let player;
+  let cursors;
+  let spacebar;
+  let enemies;
+  let bullets;
+  let stars;
+  let score = 0;
+  let scoreText;
+  let gameOver = false;
+  let lastFired = 0;
+
+  // 创建游戏实例
+  const game = new Phaser.Game(config);
+
+  function preload() {
+    // 创建简单的图形资源（避免外部文件）
+    this.createPlayerTexture();
+    this.createEnemyTexture();
+    this.createBulletTexture();
+    this.createStarTexture();
+  }
+
+  function create() {
+    // 创建玩家飞船
+    player = this.physics.add.sprite(400, 500, 'player');
+    player.setCollideWorldBounds(true);
+    player.setScale(1.5);
+
+    // 创建敌人组
+    enemies = this.physics.add.group();
+    createEnemies.call(this);
+
+    // 创建子弹组
+    bullets = this.physics.add.group({
+      defaultKey: 'bullet',
+      maxSize: 10
+    });
+
+    // 创建背景星星
+    createStars.call(this);
+
+    // 设置碰撞检测
+    this.physics.add.overlap(bullets, enemies, hitEnemy, null, this);
+    this.physics.add.overlap(player, enemies, gameOverHandler, null, this);
+
+    // 输入控制
+    cursors = this.input.keyboard.createCursorKeys();
+    spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+
+    // 分数显示
+    scoreText = this.add.text(16, 16, '分数: 0', {
+      fontSize: '24px',
+      fill: '#fff',
+      fontFamily: 'Arial'
+    });
+
+    // 游戏说明
+    this.add.text(16, 560, '← → 移动飞船，空格键射击', {
+      fontSize: '16px',
+      fill: '#aaa',
+      fontFamily: 'Arial'
+    });
+  }
+
+  function update(time) {
+    if (gameOver) return;
+
+    // 玩家移动
+    if (cursors.left.isDown) {
+      player.setVelocityX(-300);
+    } else if (cursors.right.isDown) {
+      player.setVelocityX(300);
+    } else {
+      player.setVelocityX(0);
+    }
+
+    // 射击（限制射速）
+    if (spacebar.isDown && time > lastFired) {
+      fireBullet.call(this);
+      lastFired = time + 200; // 200ms 冷却
+    }
+
+    // 移动星星（背景动画）
+    stars.children.iterate((star) => {
+      star.y += star.speed;
+      if (star.y > 600) {
+        star.y = 0;
+        star.x = Phaser.Math.Between(0, 800);
+      }
+    });
+
+    // 移动敌人
+    enemies.children.iterate((enemy) => {
+      enemy.y += enemy.speed;
+      if (enemy.y > 600) {
+        resetEnemyPosition(enemy);
+      }
+    });
+  }
+
+  // 创建敌人
+  function createEnemies() {
+    for (let i = 0; i < 8; i++) {
+      const enemy = enemies.create(
+        Phaser.Math.Between(50, 750),
+        Phaser.Math.Between(-400, -50),
+        'enemy'
+      );
+      enemy.setScale(1.2);
+      enemy.speed = Phaser.Math.Between(50, 100);
+      enemy.setBounce(1);
+      enemy.setCollideWorldBounds(true);
+    }
+  }
+
+  // 创建背景星星
+  function createStars() {
+    stars = this.add.group();
+    for (let i = 0; i < 100; i++) {
+      const star = this.add.circle(
+        Phaser.Math.Between(0, 800),
+        Phaser.Math.Between(0, 600),
+        Phaser.Math.Between(1, 3),
+        0xffffff
+      );
+      star.speed = Phaser.Math.Between(10, 50);
+      stars.add(star);
+    }
+  }
+
+  // 发射子弹
+  function fireBullet() {
+    const bullet = bullets.get(player.x, player.y - 20);
+    if (bullet) {
+      bullet.setActive(true);
+      bullet.setVisible(true);
+      bullet.setVelocityY(-400);
+
+      // 添加射击音效（模拟）
+      playLaserSound.call(this);
+    }
+  }
+
+  // 击中敌人
+  function hitEnemy(bullet, enemy) {
+    bullet.setActive(false);
+    bullet.setVisible(false);
+    resetEnemyPosition(enemy);
+
+    // 分数增加
+    score += 10;
+    scoreText.setText('分数: ' + score);
+
+    // 爆炸效果
+    createExplosion.call(this, enemy.x, enemy.y);
+
+    // 播放音效（模拟）
+    playExplosionSound.call(this);
+
+    // 每得100分增加难度
+    if (score % 100 === 0) {
+      increaseDifficulty();
+    }
+  }
+
+  // 游戏结束
+  function gameOverHandler(player, enemy) {
+    gameOver = true;
+    player.setTint(0xff0000);
+
+    this.physics.pause();
+
+    // 显示游戏结束文字
+    const gameOverText = this.add.text(400, 300, '游戏结束!', {
+      fontSize: '48px',
+      fill: '#ff0000',
+      fontFamily: 'Arial'
+    });
+    gameOverText.setOrigin(0.5);
+
+    const finalScoreText = this.add.text(400, 350, '最终分数: ' + score, {
+      fontSize: '32px',
+      fill: '#fff',
+      fontFamily: 'Arial'
+    });
+    finalScoreText.setOrigin(0.5);
+
+    const restartText = this.add.text(400, 400, '点击屏幕重新开始', {
+      fontSize: '24px',
+      fill: '#aaa',
+      fontFamily: 'Arial'
+    });
+    restartText.setOrigin(0.5);
+
+    // 重新开始游戏
+    this.input.on('pointerdown', () => {
+      this.scene.restart();
+    });
+  }
+
+  // 重置敌人位置
+  function resetEnemyPosition(enemy) {
+    enemy.y = Phaser.Math.Between(-100, -50);
+    enemy.x = Phaser.Math.Between(50, 750);
+  }
+
+  // 增加难度
+  function increaseDifficulty() {
+    enemies.children.iterate((enemy) => {
+      enemy.speed += 10;
+    });
+  }
+
+  // 创建爆炸效果
+  function createExplosion(x, y) {
+    const particles = this.add.group();
+    for (let i = 0; i < 8; i++) {
+      const particle = this.add.circle(x, y, 2, 0xffff00);
+      particles.add(particle);
+
+      this.tweens.add({
+        targets: particle,
+        x: x + Phaser.Math.Between(-50, 50),
+        y: y + Phaser.Math.Between(-50, 50),
+        alpha: 0,
+        scale: 0,
+        duration: 500,
+        ease: 'Power2'
+      });
+    }
+  }
+
+  // 模拟音效函数
+  function playLaserSound() {
+    // 在实际项目中这里会播放音效文件
+    console.log('🔊 激光音效');
+  }
+
+  function playExplosionSound() {
+    // 在实际项目中这里会播放音效文件
+    console.log('💥 爆炸音效');
+  }
+
+  // 创建纹理资源
+  function createPlayerTexture() {
+    const graphics = this.add.graphics();
+    graphics.fillStyle(0x00ff00);
+    graphics.fillTriangle(0, -15, -10, 10, 10, 10);
+    graphics.generateTexture('player', 20, 20);
+    graphics.destroy();
+  }
+
+  function createEnemyTexture() {
+    const graphics = this.add.graphics();
+    graphics.fillStyle(0xff0000);
+    graphics.fillTriangle(0, 10, -10, -10, 10, -10);
+    graphics.generateTexture('enemy', 20, 20);
+    graphics.destroy();
+  }
+
+  function createBulletTexture() {
+    const graphics = this.add.graphics();
+    graphics.fillStyle(0xffff00);
+    graphics.fillRect(0, 0, 3, 10);
+    graphics.generateTexture('bullet', 3, 10);
+    graphics.destroy();
+  }
+
+  function createStarTexture() {
+    // 星星已经在 createStars 中直接绘制
+  }
+</script>
+</body>
+</html>
